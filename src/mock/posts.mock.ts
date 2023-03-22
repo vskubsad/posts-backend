@@ -1,34 +1,31 @@
 import { PostsEntity } from 'src/posts/entity/PostsEntity';
+import { v4 as uuidv4 } from 'uuid';
+import { LoremIpsum } from 'lorem-ipsum';
 
-export const posts: PostsEntity[] = [
-  {
-    id: 'eac400ba-3c78-11e9-b210-d663bd873d93',
-    title: 'Supermarket Todo list',
-    subTitle: 'posts list',
-    description: 'Super',
+const INITIAL_POSTS_COUNT = 5;
+
+const lorem = new LoremIpsum({
+  sentencesPerParagraph: {
+    max: 8,
+    min: 4,
   },
-  {
-    id: 'eac40736-3c78-11e9-b210-d663bd873d93',
-    title: 'Office Todo list',
-    subTitle: 'posts list',
-    description: 'Super',
+  wordsPerSentence: {
+    max: 16,
+    min: 4,
   },
-  {
-    id: 'eac408d0-3c78-11e9-b210-d663bd873d93',
-    title: 'Traveling Todo  list',
-    subTitle: 'posts list',
-    description: 'Super',
-  },
-  {
-    id: 'eac40a7e-3c78-11e9-b210-d663bd873d93',
-    title: 'Studying Todo list',
-    subTitle: 'posts list',
-    description: 'Super',
-  },
-  {
-    id: 'eac40c90-3c78-11e9-b210-d663bd873d93',
-    title: 'Monday Todo list',
-    subTitle: 'posts list',
-    description: 'Super',
-  },
-];
+});
+
+const generatePosts = () => {
+  const initialPosts = [];
+  for (let i = 0; i < INITIAL_POSTS_COUNT; i++) {
+    initialPosts.push({
+      id: uuidv4(),
+      title: lorem.generateWords(2),
+      subTitle: lorem.generateWords(7),
+      description: lorem.generateSentences(45),
+    });
+  }
+  return initialPosts;
+};
+
+export const posts: PostsEntity[] = generatePosts();
