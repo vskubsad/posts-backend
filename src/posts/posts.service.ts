@@ -1,4 +1,5 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+
 import { posts } from 'src/mock/posts.mock';
 import { toPostsDto } from 'src/shared/mapper';
 import { toPromise } from 'src/shared/utils';
@@ -9,22 +10,18 @@ import { PostsEntity } from './entity/PostsEntity';
 
 @Injectable()
 export class PostsService {
-  /** 1 */
   posts: PostsEntity[] = posts;
 
   async getOnePosts(id: string): Promise<PostsDto> {
-    /** 2 */
     const todo = this.posts.find((todo) => todo.id === id);
 
     if (!todo) {
-      /** 3 */
       throw new HttpException(
         `Post item doesn't exist`,
         HttpStatus.BAD_REQUEST,
       );
     }
 
-    /** 4 */
     return toPromise(toPostsDto(todo));
   }
 
