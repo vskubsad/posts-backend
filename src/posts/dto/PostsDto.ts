@@ -3,4 +3,5 @@ export class PostsDto {
   title: string;
   subTitle: string;
   description: string;
+  date?: string;
 }
