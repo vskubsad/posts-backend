@@ -1,5 +1,12 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { Controller, Get, UseGuards, Res, Req } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  UseGuards,
+  Res,
+  Req,
+  HttpStatus,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
 import { AuthService } from './auth.service';
@@ -10,32 +17,41 @@ export class AuthController {
 
   @Get('google')
   @UseGuards(AuthGuard('google'))
-  async googleLogin() {}
+  async googleLogin() {
+    return HttpStatus.OK;
+  }
 
   @Get('google/callback')
   @UseGuards(AuthGuard('google'))
   googleLoginCallback(@Req() req, @Res() res) {
-    // handles the Google OAuth2 callback
-    const jwt: string = req.user.jwt;
-    if (jwt) {
-      // res.setHeader('Access-Control-Allow-Origin', '*');
-      // res.setHeader('Access-Control-Allow-Credentials', 'true');
-      // res.setHeader('Access-Control-Max-Age', '1800');
-      // res.setHeader('Access-Control-Allow-Headers', 'content-type');
-      // res.setHeader(
-      //   'Access-Control-Allow-Methods',
-      //   'PUT, POST, GET, DELETE, PATCH, OPTIONS',
-      // );
-      // res.setHeader('Content-Type', 'application/json;charset=utf-8');
-      res.redirect('http://localhost:4200/login/?jwt_token=' + jwt);
-    } else {
-      res.redirect('http://localhost:4200/login/failure');
-    }
+    this.redirectToApplication(req, res);
   }
 
   @Get('protected')
   @UseGuards(AuthGuard('jwt'))
   protectedResource() {
     return 'JWT is working!';
+  }
+
+  @Get('/facebook')
+  @UseGuards(AuthGuard('facebook'))
+  async facebookLogin(): Promise<any> {
+    return HttpStatus.OK;
+  }
+
+  @Get('/facebook/redirect')
+  @UseGuards(AuthGuard('facebook'))
+  async facebookLoginRedirect(@Req() req: any, @Res() res): Promise<any> {
+    this.redirectToApplication(req, res);
+  }
+
+  redirectToApplication(req, res) {
+    const jwt: string = req.user.jwt;
+
+    if (jwt) {
+      res.redirect('http://localhost:4200/login/?jwt_token=' + jwt);
+    } else {
+      res.redirect('http://localhost:4200/loginError');
+    }
   }
 }

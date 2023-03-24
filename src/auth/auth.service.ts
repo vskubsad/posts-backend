@@ -4,6 +4,7 @@ import { sign } from 'jsonwebtoken';
 
 export enum Provider {
   GOOGLE = 'google',
+  FACEBOOK = 'facebook',
 }
 
 @Injectable()
@@ -28,7 +29,6 @@ export class AuthService {
         thirdPartyId,
         provider,
       };
-
       const jwt: string = sign(payload, this.JWT_SECRET_KEY, {
         expiresIn: 60, // in seconds
       });
