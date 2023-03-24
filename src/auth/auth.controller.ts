@@ -51,7 +51,7 @@ export class AuthController {
     if (jwt) {
       res.redirect('http://localhost:4200/login/?jwt_token=' + jwt);
     } else {
-      res.redirect('http://localhost:4200/loginError');
+      res.redirect('http://localhost:4200/login-error');
     }
   }
 }
